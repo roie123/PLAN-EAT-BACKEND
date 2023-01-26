@@ -45,7 +45,15 @@ public List<Ingredient> getByType(@PathVariable IngredientType ingredientType){
 
 
 
+@GetMapping("/getIngListDto/{ingType}")
+public IngredientTypeListDTO getIngTypeListDto(@PathVariable IngredientType ingType ){
+    return ingredientService.getIngredeintDTOByIngredientType(ingType);
+}
 
+@GetMapping("/filterByIngredientTypePattern/{searchPattern}")
+public List<Ingredient> getByIngredientTypePattern(@PathVariable String searchPattern ){
+    return  ingredientService.getByIngredeintTypePattern(searchPattern);
+}
 
 
 

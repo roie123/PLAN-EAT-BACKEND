@@ -42,6 +42,39 @@ public class IngredientService implements GodService<Ingredient> {
 
 
     /**
+     * Methods for The Ingredient Type Selection using the IngredientTypeDto
+     */
+    public IngredientTypeListDTO getIngredeintDTOByIngredientType(IngredientType ingredientType){
+        IngredientTypeListDTO ingredientTypeListDTO = new IngredientTypeListDTO();
+        List<Ingredient> list = ingredientRepository.getByIngredientType(ingredientType);
+        ingredientTypeListDTO.setAvgPrice(getAvgCostOfIngredeientList(list));
+        ingredientTypeListDTO.setIngredientType(ingredientType);
+        ingredientTypeListDTO.setIngredients(list);
+        return ingredientTypeListDTO;
+
+    }
+
+
+    /**
+     * this method is responsible to get a valure from the controller a nreturn a List of ingredients that contains this pattern in there ingredientType att
+     * @return
+     */
+    public List<Ingredient> getByIngredeintTypePattern(String patternToSearch){
+        patternToSearch = "%"+patternToSearch+"%";
+        return ingredientRepository.searchByPatternInIngredientType(patternToSearch);
+    }
+
+
+    public double getAvgCostOfIngredeientList(List<Ingredient>ingredients){
+        double sum = 0;
+        for (Ingredient ing: ingredients) {
+            sum+=ing.getPrice();
+        }
+        return (sum/ingredients.size());
+    }
+
+
+    /**
      * Those are the regular Service Layer methods
      */
     @Override
@@ -89,4 +122,6 @@ public class IngredientService implements GodService<Ingredient> {
     public void deleteObject(Long objectId) throws Exception {
         ingredientRepository.deleteById(objectId);
     }
+
+
 }
