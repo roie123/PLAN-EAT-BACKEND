@@ -55,6 +55,11 @@ public List<Ingredient> getByIngredientTypePattern(@PathVariable String searchPa
     return  ingredientService.getByIngredeintTypePattern(searchPattern);
 }
 
+@GetMapping("/filter1/{searchPattern}")
+public List<Ingredient> getBySearch(@PathVariable String searchPattern){
+    return ingredientService.getAllBySearch(searchPattern);
+}
+
 
 
 

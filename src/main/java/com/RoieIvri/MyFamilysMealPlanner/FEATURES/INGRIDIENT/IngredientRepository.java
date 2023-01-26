@@ -23,4 +23,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     @Query(value = "select * from myfamilymealplanner.ingredient where ingredient_type like  ? " , nativeQuery = true)
     List<Ingredient> searchByPatternInIngredientType(@Param("pattern") String searchPattern);
+
+    @Query(value = "select * from myfamilymealplanner.ingredient where ingredient_type like  ?  or  name like ? " , nativeQuery = true)
+    List<Ingredient> searchForIngredientByTypeOrName(String searchPattern , String searchPattern2 );
 }

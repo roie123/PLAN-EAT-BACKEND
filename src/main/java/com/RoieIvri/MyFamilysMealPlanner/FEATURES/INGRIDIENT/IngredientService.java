@@ -74,6 +74,28 @@ public class IngredientService implements GodService<Ingredient> {
     }
 
 
+
+    public List<Ingredient> getAllBySearch(String searchPattern){
+        searchPattern = "%"+searchPattern+"%";
+        return  ingredientRepository.searchForIngredientByTypeOrName(searchPattern, searchPattern);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Those are the regular Service Layer methods
      */
