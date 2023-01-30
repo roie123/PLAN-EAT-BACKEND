@@ -39,15 +39,22 @@ public class RecipeService {
 
 
     }
-
+@Transactional
     public Recipe updateObject(Recipe recipe, Long objectId) throws Exception {
         if (FormatValidator.isRecipeInValid(recipe)) {
             throw new GeneralExceptions("FORMAT EXCEPTION");
 
         } else {
             if (recipeRepository.existsById(objectId)) {
-                recipe.setId(objectId);
-                return recipeRepository.saveAndFlush(recipe);
+                Recipe prevRecipe = recipeRepository.findById(objectId).get();
+                prevRecipe.setName(recipe.getName());
+                prevRecipe.setEstimatedPrice(recipe.getEstimatedPrice());
+                prevRecipe.setRecommended(recipe.isRecommended());
+                prevRecipe.setImgUrl(recipe.getImgUrl());
+                prevRecipe.setActive(recipe.isActive());
+                prevRecipe.setIngredients(recipe.getIngredients());
+//                recipe.setId(objectId);
+                return recipeRepository.saveAndFlush(prevRecipe);
 
             } else {
                 throw new GeneralExceptions("CANNOT FIND RECIPE BY GIVEN ID ");

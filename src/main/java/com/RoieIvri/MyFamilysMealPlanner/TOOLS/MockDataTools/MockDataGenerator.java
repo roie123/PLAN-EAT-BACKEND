@@ -102,7 +102,7 @@ public class MockDataGenerator implements InitializingBean {
                         ingredient.setName(IngredientNames.getRandom());
                         ingredient.setPriceCategory(PriceCategory.getRandom());
                         ingredient.setIngredientType(IngredientType.getRandom());
-
+                        ingredient.setImgUrl(RandomIngrredientImgUrl.getRandom());
 
 
                         recipe.addIngredient(ingredient);

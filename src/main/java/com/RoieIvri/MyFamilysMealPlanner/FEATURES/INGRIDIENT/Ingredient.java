@@ -29,7 +29,7 @@ public class Ingredient implements Comparable<Ingredient> {
     private PriceCategory priceCategory;
     private double price;
     private boolean isActive = true;
-
+    private  String imgUrl;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @ToString.Exclude

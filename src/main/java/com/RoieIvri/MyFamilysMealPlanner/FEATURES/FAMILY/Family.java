@@ -34,7 +34,7 @@ public class Family {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER, mappedBy = "family")
     private List<Day> dayList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "family", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "family", cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<Recipe> favoriteRecipes = new ArrayList<>();
 
     private String email;

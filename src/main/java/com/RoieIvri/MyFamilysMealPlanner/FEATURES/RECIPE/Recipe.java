@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-//@ToString
 public class Recipe {
 
     @Id
@@ -28,7 +27,7 @@ public class Recipe {
     private boolean isActive = true;
     private String imgUrl;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = { CascadeType.PERSIST})
     private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -59,4 +58,18 @@ public class Recipe {
         this.ingredients.add(ingredient);
     }
 
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isRecommended=" + isRecommended +
+                ", estimatedPrice=" + estimatedPrice +
+                ", isActive=" + isActive +
+                ", imgUrl='" + imgUrl + '\'' +
+//                ", ingredients=" + ingredients +
+                ", meal=" + meal +
+//                ", family=" + family +
+                '}';
+    }
 }

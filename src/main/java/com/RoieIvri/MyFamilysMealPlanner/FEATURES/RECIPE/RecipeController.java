@@ -24,6 +24,7 @@ public class RecipeController {
 
     @PutMapping("/{objectId}")
     public Recipe updateObject(@RequestBody Recipe recipe, @PathVariable Long objectId) throws Exception {
+        System.out.println(recipe);
         return recipeService.updateObject(recipe, objectId);
     }
 

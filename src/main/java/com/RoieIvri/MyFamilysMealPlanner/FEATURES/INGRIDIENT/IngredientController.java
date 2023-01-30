@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
-public class IngredientController implements GodController<Ingredient>{
+public class IngredientController {
     @Autowired
     private final IngredientService ingredientService;
 
@@ -55,7 +55,7 @@ public List<Ingredient> getByIngredientTypePattern(@PathVariable String searchPa
     return  ingredientService.getByIngredeintTypePattern(searchPattern);
 }
 
-@GetMapping("/filter1/{searchPattern}")
+@GetMapping("/filter/{searchPattern}")
 public List<Ingredient> getBySearch(@PathVariable String searchPattern){
     return ingredientService.getAllBySearch(searchPattern);
 }
@@ -73,7 +73,6 @@ public List<Ingredient> getBySearch(@PathVariable String searchPattern){
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Override
     public Ingredient addObject(@RequestBody Ingredient ingredient) throws Exception {
         return ingredientService.addObject(ingredient);
 
@@ -81,7 +80,7 @@ public List<Ingredient> getBySearch(@PathVariable String searchPattern){
 
     @PutMapping("/{objectId}")
     @ResponseStatus(HttpStatus.OK)
-    @Override
+
     public Ingredient updateObject(@RequestBody Ingredient ingredient, @PathVariable Long objectId) throws Exception {
         System.out.println(ingredient);
         return ingredientService.updateObject(ingredient,objectId);
@@ -89,26 +88,22 @@ public List<Ingredient> getBySearch(@PathVariable String searchPattern){
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    @Override
     public List<Ingredient> getAll() throws Exception {
         return ingredientService.getAll();
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Override
     public List<Ingredient> getAllActive() throws Exception {
         return ingredientService.getAllActive();
     }
 
     @PutMapping("/disable/{objectId}")
-    @Override
     public Ingredient disableObject(@PathVariable Long objectId) throws Exception {
         return ingredientService.disableObject(objectId);
     }
 
     @DeleteMapping("/{objectId}")
-    @Override
     public void deleteObject(@PathVariable Long objectId) throws Exception {
     ingredientService.deleteObject(objectId);
     }
