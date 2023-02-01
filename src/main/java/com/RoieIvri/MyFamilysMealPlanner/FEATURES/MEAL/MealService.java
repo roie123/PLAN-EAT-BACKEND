@@ -1,22 +1,26 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL;
 
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.Family;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.FamilyService;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.FormatValidator;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GeneralExceptions;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MealService implements GodService<Meal> {
+public class MealService  {
     @Autowired
     private final MealRepoitory mealRepoitory;
 
-    @Override
+    private  final FamilyService familyService;
+
     public Meal addObject(Meal meal) throws Exception {
         if (FormatValidator.isInvalidMeal(meal)) {
             throw new GeneralExceptions("FORMAT VALIDATION EXCEPTION");
@@ -25,28 +29,34 @@ public class MealService implements GodService<Meal> {
         }
     }
 
-    @Override
+    @Transactional
     public Meal updateObject(Meal meal, Long objectId) throws Exception {
         if (FormatValidator.isInvalidMeal(meal)) {
             throw new GeneralExceptions("FORMAT VALIDATION EXCEPTION");
         } else {
-            meal.setId(objectId);
-            return mealRepoitory.saveAndFlush(meal);
+
+            if (mealRepoitory.existsById(objectId)){
+                Meal mealFromDB = mealRepoitory.findById(objectId).get();
+                mealFromDB.setMealTime(meal.getMealTime());
+                mealFromDB.setNumberOfEaters(mealFromDB.getNumberOfEaters());
+                mealFromDB.setTimeToMakeInMinutes(meal.getTimeToMakeInMinutes());
+                mealFromDB.setRecipeList(meal.getRecipeList());
+                mealRepoitory.saveAndFlush(mealFromDB);
+
+            }
+            return null;
 
         }
     }
 
-    @Override
     public List<Meal> getAll() throws Exception {
         return mealRepoitory.findAll();
     }
 
-    @Override
     public List<Meal> getAllActive() throws Exception {
         return mealRepoitory.getAllByisActiveIsTrue();
     }
 
-    @Override
     public Meal disableObject(Long objectId) throws Exception {
         if (mealRepoitory.existsById(objectId)) {
             Meal meal = mealRepoitory.findById(objectId).get();
@@ -56,7 +66,6 @@ public class MealService implements GodService<Meal> {
         } else throw new GeneralExceptions("MEAL NOT FOUND BY ID");
     }
 
-    @Override
     public void deleteObject(Long objectId) throws Exception {
         mealRepoitory.deleteById(objectId);
     }
