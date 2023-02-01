@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/meal")
 @RequiredArgsConstructor
+@CrossOrigin
 public class MealController implements GodController<Meal> {
 
     @Autowired
