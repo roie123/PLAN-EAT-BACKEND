@@ -30,7 +30,7 @@ public class Meal  {
     private boolean isActive= true;
     @Enumerated(EnumType.STRING)
     private MealTime mealTime;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<Recipe> recipeList= new ArrayList<>();
 
     public Long getId() {
