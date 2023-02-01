@@ -27,11 +27,12 @@ public class Recipe {
     private boolean isActive = true;
     private String imgUrl;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Meal meal;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JsonIgnore
+    private List<Meal> meals;
 
     @JsonIgnore
     @ManyToOne
@@ -68,8 +69,8 @@ public class Recipe {
                 ", isActive=" + isActive +
                 ", imgUrl='" + imgUrl + '\'' +
 //                ", ingredients=" + ingredients +
-                ", meal=" + meal +
+                ", meal=" + meals;
 //                ", family=" + family +
-                '}';
+
     }
 }
