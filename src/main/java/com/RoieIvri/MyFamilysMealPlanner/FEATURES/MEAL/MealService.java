@@ -29,7 +29,6 @@ public class MealService  {
         }
     }
 
-    @Transactional
     public Meal updateObject(Meal meal, Long objectId) throws Exception {
         if (FormatValidator.isInvalidMeal(meal)) {
             throw new GeneralExceptions("FORMAT VALIDATION EXCEPTION");
