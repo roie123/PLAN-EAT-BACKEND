@@ -25,7 +25,7 @@ public class Meal  {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private int timeToMakeInMinutes;
+    private int timeToMakeInMinutes; ///TODO : Think about moving this att to a spacial DTo , its the sum of the
     private int numberOfEaters;
     private boolean isActive= true;
     @Enumerated(EnumType.STRING)

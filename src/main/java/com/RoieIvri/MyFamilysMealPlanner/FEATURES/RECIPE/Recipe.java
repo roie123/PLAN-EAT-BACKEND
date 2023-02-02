@@ -26,7 +26,7 @@ public class Recipe {
     private double estimatedPrice;
     private boolean isActive = true;
     private String imgUrl;
-
+    private int timeToMake;
     @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Ingredient> ingredients = new ArrayList<>();
 

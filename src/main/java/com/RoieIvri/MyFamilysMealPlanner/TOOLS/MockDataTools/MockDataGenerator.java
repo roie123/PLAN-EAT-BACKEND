@@ -96,6 +96,7 @@ public class MockDataGenerator implements InitializingBean {
                     recipe.setRecommended(random.nextBoolean());
                     recipe.setEstimatedPrice(random.nextDouble(1,50));
                     recipe.setName(RecipeNames.getRandomRecipe());
+                    recipe.setTimeToMake(random.nextInt(1,18));
                     for (int l = 0; l < 3; l++) {
                         Ingredient ingredient = new Ingredient();
                         ingredient.setPrice(random.nextDouble(1,30));
