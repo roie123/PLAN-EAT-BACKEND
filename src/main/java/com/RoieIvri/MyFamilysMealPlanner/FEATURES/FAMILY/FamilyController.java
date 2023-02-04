@@ -1,9 +1,11 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY;
 
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.User;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GeneralExceptions;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GodController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,13 @@ import java.util.List;
 public class FamilyController implements GodController<Family> {
 
     private final FamilyService familyService;
+
+
+    @PostMapping("/addToFamily/{familyId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addToFamily(@RequestBody User user, @PathVariable Long familyId) throws GeneralExceptions {
+        familyService.addToFamily(user, familyId);
+    }
 
 
     @Override
