@@ -41,18 +41,13 @@ public class UserService implements GodService<User> {
         if (FormatValidator.isUserInvalid(user)){
             throw new GeneralExceptions("FORMAT EXCEPTION");
         }
-//        List<User> someShit = new ArrayList<>();
-//        for (User u: user.getFamily()) {
-//            if (userRepository.existsById(u.getId())){
-//                someShit.add(u);
-//
-//            }
-//        }
-//        user.setFamily(someShit);
 
         if (userRepository.existsById(objectId)){
-            user.setId(objectId);
-            return userRepository.saveAndFlush(user);
+            User userFromDB = userRepository.findById(objectId).get();
+            userFromDB.setName(user.getName());
+            userFromDB.setImgUrl(user.getImgUrl());
+
+            return userRepository.saveAndFlush(userFromDB);
 
         }
         else {
@@ -84,7 +79,12 @@ public class UserService implements GodService<User> {
 
     @Override
     public void deleteObject(Long objectId) throws Exception {
-        userRepository.deleteById(objectId);
+        if (userRepository.existsById(objectId)){
+            User user = userRepository.findById(objectId).get();
+            user.setFamily(null);
+            userRepository.save(user);
+            return;
+        }throw new GeneralExceptions("ID NOT FOUND");
 
     }
 
