@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@CrossOrigin
 public class UserController implements GodController<User>{
     @Autowired
     private final UserService userService;
