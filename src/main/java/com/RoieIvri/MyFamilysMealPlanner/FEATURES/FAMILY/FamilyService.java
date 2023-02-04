@@ -117,4 +117,16 @@ public class FamilyService {
     }
 
 
+    @Transactional
+    public void addToFamily(User user ,Long familyId) throws GeneralExceptions {
+        System.out.println(familyId);
+        if (familyRepository.existsById(familyId)){
+            Family familyFromDB = familyRepository.findById(familyId).get();
+            List<User> newUsersList = familyFromDB.getFamilyMembers();
+            user.setFamily(familyFromDB);
+            newUsersList.add(user);
+            familyRepository.save(familyFromDB);
+            return;
+        }throw new GeneralExceptions("NOT FOUND BY ID ");
+    }
 }
