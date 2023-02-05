@@ -28,7 +28,7 @@ public class User  {
     private boolean isActive= true;
     private String name;
     private String imgUrl;
-
+    private FamilyRole familyRole=FamilyRole.regular; //the role of the user , the mainUser will be selected not upon creation.
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     private List<Recipe> favoriteRecipes=new ArrayList<>();
