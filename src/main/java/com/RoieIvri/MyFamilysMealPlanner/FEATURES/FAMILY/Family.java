@@ -1,5 +1,6 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY;
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.Cart;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.DAY.Day;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.Recipe;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.User;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//@ToString
 public class Family {
 
     @Id
@@ -37,6 +39,9 @@ public class Family {
     @OneToMany(mappedBy = "family", cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<Recipe> favoriteRecipes = new ArrayList<>();
 
+    @OneToOne(mappedBy = "family" )
+    private Cart cart ;
+
     private String email;
     private String password;
 
@@ -55,6 +60,8 @@ public class Family {
     public void addToFavoriteRecipes(List<Recipe> recipes) {
         this.favoriteRecipes.addAll(recipes);
     }
+
+
 
     public void addWeek(List<Day> days) throws FormatValidatorException {
 

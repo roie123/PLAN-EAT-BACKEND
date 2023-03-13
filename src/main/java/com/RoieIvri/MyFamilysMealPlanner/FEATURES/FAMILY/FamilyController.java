@@ -1,6 +1,8 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY;
 
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.Cart;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.CartService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.User;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GeneralExceptions;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GodController;
@@ -18,13 +20,14 @@ public class FamilyController implements GodController<Family> {
 
     private final FamilyService familyService;
 
+    private final CartService cartService;
+
 
     @PostMapping("/addToFamily/{familyId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addToFamily(@RequestBody User user, @PathVariable Long familyId) throws GeneralExceptions {
         familyService.addToFamily(user, familyId);
     }
-
 
     @Override
     @PostMapping
@@ -67,5 +70,11 @@ public class FamilyController implements GodController<Family> {
     @DeleteMapping("/{objectId}")
     public void deleteObject(@PathVariable Long objectId) throws Exception {
         familyService.deleteObject(objectId);
+    }
+
+
+    @PostMapping("/newCart/{familyId}")
+    public Cart generateNewCartForWeek(@PathVariable Long familyId) throws Exception {
+        return cartService.generateCart(familyId);
     }
 }

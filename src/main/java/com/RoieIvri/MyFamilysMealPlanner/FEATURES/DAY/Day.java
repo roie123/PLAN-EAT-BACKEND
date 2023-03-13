@@ -31,10 +31,10 @@ public class Day {
 
     private LocalDate localDate;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Meal> mealList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne()
     @JsonIgnore
     private Family family;
 

@@ -12,48 +12,42 @@ import java.util.List;
 @RequestMapping("/api/meal")
 @RequiredArgsConstructor
 @CrossOrigin
-public class MealController implements GodController<Meal> {
+public class MealController  {
 
     @Autowired
     private final MealService mealService;
 
-    @PostMapping
+    @PostMapping("/{familyId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @Override
-    public Meal addObject(@RequestBody Meal meal) throws Exception {
+    public Meal addObject(@RequestBody Meal meal,@PathVariable Long familyId) throws Exception {
 
-        return mealService.addObject(meal);
+        return mealService.addObject(meal,familyId);
 
     }
 
     @PutMapping("/{objectId}")
     @ResponseStatus(HttpStatus.OK)
-    @Override
     public Meal updateObject(@RequestBody Meal meal, @PathVariable Long objectId) throws Exception {
         return mealService.updateObject(meal, objectId);
     }
 
     @GetMapping("/all")
-    @Override
     public List<Meal> getAll() throws Exception {
         return mealService.getAll();
     }
 
     @GetMapping
-    @Override
     public List<Meal> getAllActive() throws Exception {
         return mealService.getAllActive();
     }
 
     @PutMapping("/disable/{objectId}")
-    @Override
     public Meal disableObject(@PathVariable Long objectId) throws Exception {
         return mealService.disableObject(objectId);
 
     }
 
     @DeleteMapping("/{objectId}")
-    @Override
     public void deleteObject(@PathVariable Long objectId) throws Exception {
         mealService.deleteObject(objectId);
 

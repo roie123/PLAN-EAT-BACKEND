@@ -107,11 +107,8 @@ public class FamilyService {
     @Transactional
     public Family getFullFamilyById(Long id) throws GeneralExceptions {
         checkFamilyId(id);
-        System.out.println("111111111111111111111111");
         Family family = familyRepository.findById(id).get();
-        System.out.println(dayService.getDaysByFamily(family));
         family.setFamilyMembers(userService.getUsersByFamily(family));
-        System.out.println(family);
         return family;
 
     }
@@ -128,5 +125,18 @@ public class FamilyService {
             familyRepository.save(familyFromDB);
             return;
         }throw new GeneralExceptions("NOT FOUND BY ID ");
+    }
+
+
+    @Transactional
+    public Family getFamilyWithChildEntityList(Long familyId) throws FamilyException {
+        if (familyRepository.existsById(familyId)){
+            Family family = familyRepository.findById(familyId).get();
+            if (family.getDayList().size()> -1){
+                return family;
+            }
+        }
+
+        throw new FamilyException("Family Not Found By id ");
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 //@ToString
 public class Meal  {
 
@@ -30,7 +31,7 @@ public class Meal  {
     private boolean isActive= true;
     @Enumerated(EnumType.STRING)
     private MealTime mealTime;
-    @OneToMany(cascade = {CascadeType.ALL})
+    @ManyToMany()
     private List<Recipe> recipeList= new ArrayList<>();
 
     public Long getId() {

@@ -1,6 +1,8 @@
 package com.RoieIvri.MyFamilysMealPlanner.TOOLS.MockDataTools;
 
 import com.RoieIvri.MyFamilysMealPlanner.CONFIG.GlobalConfig;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.Cart;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.CartService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.DAY.Day;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.DAY.DayService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.Family;
@@ -14,6 +16,7 @@ import com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL.Meal;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL.MealService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.Recipe;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.RecipeService;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.FamilyRole;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.User;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.UserService;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.MealTime;
@@ -45,21 +48,24 @@ public class MockDataGenerator implements InitializingBean {
     @Autowired
     private RecipeService recipeService;
 
-    private  final FamilyService familyService;
+    private final FamilyService familyService;
     private final FamilyRepository familyRepository;
+
+    private final CartService cartService;
 
     @Transactional
     public void getMockData() throws Exception {
         Random random = new Random();
 
 
-     Family family = new Family();
-     family.setName("Rosen");
-     family.setEmail("mayaRosen@gmail.com");
-     family.setPassword("123456");
+        Family family = new Family();
+        family.setName("Rosen");
+        family.setEmail("mayaRosen@gmail.com");
+        family.setPassword("123456");
 
         User user = new User();
         user.setName("Maya Rosen");
+        user.setFamilyRole(FamilyRole.mainUser);
         user.setFamily(family);
         user.setImgUrl("https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
 
@@ -75,48 +81,62 @@ public class MockDataGenerator implements InitializingBean {
         user2.setFamily(family);
         user2.setImgUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQupqeq_09mdLAy8wyA7SC5AEYMdAphunoK8Q&usqp=CAU");
 
+//        Cart cart = new Cart();
+//        cart.setFamily(family);
+//
+//        cart = cartService.addCart(cart);
+//        family.setCart(cart);
 
-        family.addAllToFamily(List.of(user,user1,user2));
 
-        LocalDate localDate ;
+        family.addAllToFamily(List.of(user, user1, user2));
+        family = familyService.addObject(family);
+
+        LocalDate localDate;
         //adding days
         for (int i = 0; i < 7; i++) {
             Day day = new Day();
             day.setDayOfWeek(LocalDate.now().getDayOfWeek().plus(i));
             day.setLocalDate(LocalDate.now().plusDays(i));
+            day.setFamily(family);
+            day = dayService.addObject(day);
+
 
             for (int j = 0; j < 3; j++) {
                 Meal meal = new Meal();
                 meal.setMealTime(MealTime.values()[j]);
-                meal.setNumberOfEaters(random.nextInt(1,4));
-                meal.setTimeToMakeInMinutes(random.nextInt(2,7));
+                meal.setNumberOfEaters(random.nextInt(1, 4));
+                meal.setTimeToMakeInMinutes(random.nextInt(2, 7));
                 for (int k = 0; k < 2; k++) {
-                    Recipe recipe =new Recipe();
+                    Recipe recipe = new Recipe();
                     recipe.setImgUrl(RandomPics.getRandomFoodPic());
                     recipe.setRecommended(random.nextBoolean());
-                    recipe.setEstimatedPrice(random.nextDouble(1,50));
+                    recipe.setEstimatedPrice(random.nextDouble(1, 50));
                     recipe.setName(RecipeNames.getRandomRecipe());
-                    recipe.setTimeToMake(random.nextInt(1,18));
+                    recipe.setTimeToMake(random.nextInt(1, 18));
                     for (int l = 0; l < 3; l++) {
                         Ingredient ingredient = new Ingredient();
-                        ingredient.setPrice(random.nextDouble(1,30));
+                        ingredient.setPrice(random.nextDouble(1, 30));
                         ingredient.setName(IngredientNames.getRandom());
                         ingredient.setPriceCategory(PriceCategory.getRandom());
                         ingredient.setIngredientType(IngredientType.getRandom());
                         ingredient.setImgUrl(RandomIngrredientImgUrl.getRandom());
 
-
+//                        cartService.addToCart(cart.getId(), ingredient);
+                        ingredient = ingredientService.addObject(ingredient);
                         recipe.addIngredient(ingredient);
                     }//END OF ING
 
-//                    recipe.setFamily(family);
+                    recipe.setFamily(family);
+                    recipe = recipeService.addObject(recipe);
                     meal.addRecipe(recipe);
                 }//END OF RECIPE
 
-
+                meal = mealService.addObject(meal, family.getId());
                 day.addMeal(meal);
             }//END OF MEAL
+
             day.setFamily(family);
+            day = dayService.addObject(day);
             family.addDay(day);
         }//END OF DAYS
 
@@ -124,7 +144,7 @@ public class MockDataGenerator implements InitializingBean {
         for (int i = 0; i < 7; i++) {
             Recipe recipe = new Recipe();
             recipe.setName(RecipeNames.getRandomRecipe());
-            recipe.setEstimatedPrice(random.nextDouble(3,15));
+            recipe.setEstimatedPrice(random.nextDouble(3, 15));
             recipe.setRecommended(random.nextBoolean());
             recipe.setImgUrl(RandomPics.getRandomFoodPic());
             family.addToFavoriteRecipes(recipe);
@@ -132,7 +152,7 @@ public class MockDataGenerator implements InitializingBean {
         }
 
 
-        System.out.println(familyService.addObject(family));
+        System.out.println(familyService.updateObject(family, family.getId()));
     }
 
 

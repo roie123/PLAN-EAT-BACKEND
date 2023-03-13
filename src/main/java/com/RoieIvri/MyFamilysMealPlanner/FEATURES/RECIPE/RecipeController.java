@@ -56,6 +56,7 @@ public class RecipeController {
 
     @PostMapping("/addToFamily/{familyId}")
     public Recipe addTOFamily(@PathVariable Long familyId, @RequestBody Recipe recipe) throws GeneralExceptions {
+        System.out.println(familyId);
         return recipeService.addToFamily(recipe, familyId);
     }
 

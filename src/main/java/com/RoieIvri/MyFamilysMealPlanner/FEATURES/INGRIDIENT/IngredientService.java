@@ -101,11 +101,11 @@ public class IngredientService implements GodService<Ingredient> {
      */
     @Override
     public Ingredient addObject(Ingredient ingredient) throws Exception {
-        if (FormatValidator.isInvalidIngredient(ingredient)) {
+//        if (FormatValidator.isInvalidIngredient(ingredient)) {
             return ingredientRepository.save(ingredient);
 
-        }
-        return null;
+//        }
+//        return null;
     }
 
     @Override

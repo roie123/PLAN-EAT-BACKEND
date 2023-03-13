@@ -99,6 +99,7 @@ public class RecipeService {
 
     @Transactional
     public Recipe addToFamily(Recipe recipe, Long familyId) throws GeneralExceptions {
+        System.out.println(familyId);
         familyService.checkFamilyId(familyId);
         Family family = familyService.getById(familyId);
         recipe.setFamily(family);

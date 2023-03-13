@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Recipe {
 
     @Id
@@ -27,10 +28,10 @@ public class Recipe {
     private boolean isActive = true;
     private String imgUrl;
     private int timeToMake;
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany()
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany()
     @JsonIgnore
     private List<Meal> meals;
 
@@ -67,10 +68,25 @@ public class Recipe {
                 ", isRecommended=" + isRecommended +
                 ", estimatedPrice=" + estimatedPrice +
                 ", isActive=" + isActive +
-                ", imgUrl='" + imgUrl + '\'' +
+                ", imgUrl='" + imgUrl + '\'' ;
 //                ", ingredients=" + ingredients +
-                ", meal=" + meals;
+//                ", meal=" + meals;
 //                ", family=" + family +
 
     }
+
+
+    public Recipe(Recipe other) {
+//        this.meals=other.getMeals();
+        this.family=other.getFamily();
+        this.name=other.getName();
+        this.estimatedPrice= other.estimatedPrice;
+        this.imgUrl=other.getImgUrl();
+        this.timeToMake=other.timeToMake;
+        this.isRecommended= other.isRecommended;
+        this.ingredients=other.getIngredients();
+        this.isActive= other.isActive;
+
+    }
+
 }

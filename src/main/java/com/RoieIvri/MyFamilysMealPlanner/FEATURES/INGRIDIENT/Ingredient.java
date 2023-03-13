@@ -1,5 +1,7 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.INGRIDIENT;
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.Cart;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.CartRepository;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.Recipe;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,10 +33,15 @@ public class Ingredient implements Comparable<Ingredient> {
     private boolean isActive = true;
     private  String imgUrl;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany()
     @ToString.Exclude
-    private List<Recipe> recipeList = new ArrayList<>();
+    private List<Recipe> recipes = new ArrayList<>();
 
+
+    @ManyToMany()
+    @JoinColumn(unique = false)
+    @ToString.Exclude
+    private List<Cart> cart;
 
     @Override
     public int compareTo(Ingredient o) {
@@ -49,4 +56,6 @@ public class Ingredient implements Comparable<Ingredient> {
         }
         return 0;
     }
+
+
 }
