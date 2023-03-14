@@ -50,6 +50,8 @@ public class RecipeController {
 
     @DeleteMapping("/{objectId}/{familyId}")
     public void deleteObject(@PathVariable Long objectId, @PathVariable Long familyId) throws Exception {
+        System.out.println(objectId);
+        System.out.println(familyId);
         recipeService.deleteObject(objectId, familyId);
 
     }

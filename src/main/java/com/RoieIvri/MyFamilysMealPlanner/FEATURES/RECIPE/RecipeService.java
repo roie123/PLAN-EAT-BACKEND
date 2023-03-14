@@ -87,14 +87,14 @@ public class RecipeService {
         family.setFavoriteRecipes(family.getFavoriteRecipes().stream().filter(new Predicate<Recipe>() {
             @Override
             public boolean test(Recipe recipe) {
-                if (recipe.getId() == objectId) {
-                    System.out.println(recipe);
+                if (recipe.getId().longValue()==objectId.longValue()){
                     return false;
                 }
                 return true;
             }
         }).collect(Collectors.toList()));
-        recipeRepository.deleteById(objectId);
+//recipeRepository.deleteById(objectId);
+
     }
 
     @Transactional

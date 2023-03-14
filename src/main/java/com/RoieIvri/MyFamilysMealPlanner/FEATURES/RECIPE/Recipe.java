@@ -36,7 +36,7 @@ public class Recipe {
     private List<Meal> meals;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Family family;
 
     public Family getFamily() {
