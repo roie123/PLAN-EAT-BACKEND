@@ -1,5 +1,6 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL;
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.Recipe;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GodController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,15 @@ public class MealController  {
     public Meal disableObject(@PathVariable Long objectId) throws Exception {
         return mealService.disableObject(objectId);
 
+    }
+
+    @PutMapping("/addPendingRecipe/{mealId}/{userId}")
+    public Meal addPendingRecipe(@RequestBody Recipe recipe,@PathVariable Long mealId,@PathVariable Long userId) throws Exception {
+       return mealService.addRecipeToApprove(recipe,mealId,userId);
+    }
+    @PutMapping("/addPendingRecipes/{mealId}/{userId}")
+    public void addPendingRecipe(@RequestBody List<Recipe> recipes,@PathVariable Long mealId,@PathVariable Long userId) throws Exception {
+         mealService.addRecipesToApprove(recipes,mealId,userId);
     }
 
     @DeleteMapping("/{objectId}")

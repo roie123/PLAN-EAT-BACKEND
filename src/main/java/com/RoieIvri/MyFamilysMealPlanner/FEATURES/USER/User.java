@@ -39,7 +39,8 @@ public class User  {
     @ManyToOne(cascade = {CascadeType.MERGE} ,fetch = FetchType.EAGER)
     private Family family;
 
-
+    @OneToMany
+    private List<Recipe> requestedRecipesToAdd;
 
 
 

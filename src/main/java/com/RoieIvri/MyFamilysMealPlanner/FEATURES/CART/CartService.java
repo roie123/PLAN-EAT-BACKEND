@@ -1,9 +1,6 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART;
 
-import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.CART_ITEM.CartItem;
-import com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART.CART_ITEM.CartItemService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.Family;
-import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.FamilyException;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.FamilyService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.INGRIDIENT.Ingredient;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.INGRIDIENT.IngredientService;
@@ -52,7 +49,7 @@ public Cart generateCart(Long familyId) throws Exception {//TODO MAKE IT WORK
             Cart cart1 = new Cart();
             cart1.setFamily(family);
             List<Ingredient> list =new ArrayList<>();
-            family.getDayList().forEach(day -> day.getMealList().forEach(meal -> meal.getRecipeList().forEach(recipe -> list.addAll(recipe.getIngredients()))));
+            family.getDayList().forEach(day -> day.getMealList().forEach(meal -> meal.getApprovedRecipes().forEach(recipe -> list.addAll(recipe.getIngredients()))));
 
             for (Ingredient ing :
                     list) {
@@ -74,7 +71,7 @@ public Cart generateCart(Long familyId) throws Exception {//TODO MAKE IT WORK
             return cartRepository.save(cart1);
         }
         List<Ingredient> list =new ArrayList<>();
-        family.getDayList().forEach(day -> day.getMealList().forEach(meal -> meal.getRecipeList().forEach(recipe -> list.addAll(recipe.getIngredients()))));
+        family.getDayList().forEach(day -> day.getMealList().forEach(meal -> meal.getApprovedRecipes().forEach(recipe -> list.addAll(recipe.getIngredients()))));
     for (Ingredient ing :
             list) {
         Ingredient ingredient = Ingredient.builder().

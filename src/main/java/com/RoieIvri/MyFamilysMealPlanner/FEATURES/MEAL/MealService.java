@@ -1,23 +1,23 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL;
 
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.DTO.AddToMealDTO.MealAddOnRequestDTO;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.DTO.AddToMealDTO.MealAddOnRequestService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.Family;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.FamilyService;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.Recipe;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.RecipeService;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.User;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.UserService;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.FormatValidator;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GeneralExceptions;
-import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GodService;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,9 @@ public class MealService  {
     private final MealRepoitory mealRepoitory;
     private final RecipeService recipeService;
     private  final FamilyService familyService;
+    private final UserService userService;
+
+    private final MealAddOnRequestService mealAddOnRequestService;
 
     public Meal addObject(Meal meal,Long familyId) throws Exception {
         if (FormatValidator.isInvalidMeal(meal)) {
@@ -37,6 +40,19 @@ public class MealService  {
         }
     }
 
+
+    public Meal addRecipeToApprove(Recipe recipe , Long mealId , Long userId) throws Exception {
+        Meal meal = mealRepoitory.findById(mealId).orElseThrow();
+        User user = userService.getSingle(userId);
+
+        List<Recipe> recipes = meal.getPendingRecipes();
+        recipes.add(recipe);
+
+        meal.setApprovedRecipes(recipes);
+       return updateObject(meal,mealId);
+
+    }
+
     public Meal updateObject(Meal meal, Long objectId) throws Exception {
         if (FormatValidator.isInvalidMeal(meal)) {
             throw new GeneralExceptions("FORMAT VALIDATION EXCEPTION");
@@ -45,7 +61,7 @@ public class MealService  {
                 mealFromDB.setMealTime(meal.getMealTime());
                 mealFromDB.setNumberOfEaters(mealFromDB.getNumberOfEaters());
                 mealFromDB.setTimeToMakeInMinutes(meal.getTimeToMakeInMinutes());
-                mealFromDB.setRecipeList(meal.getRecipeList());
+                mealFromDB.setApprovedRecipes(meal.getApprovedRecipes());
               return   mealRepoitory.saveAndFlush(mealFromDB);
 
 //            List<Recipe> recipesToAdd = meal.getRecipeList().stream().filter(recipe -> recipe.getId()==0).toList();
@@ -90,4 +106,40 @@ public class MealService  {
     public void deleteObject(Long objectId) throws Exception {
         mealRepoitory.deleteById(objectId);
     }
+
+    @Transactional
+    public void addRecipesToApprove(List<Recipe> recipes, Long mealId, Long userId) throws Exception {
+        Meal meal = mealRepoitory.findById(mealId).orElseThrow();
+
+        //The user id has to have validation because the user has control  over it
+        User user = userService.getSingle(userId);
+//        for (Recipe r : recipes
+//             ) {
+//            r.setRequestCreator(user);
+//            user.getRequestedRecipesToAdd().add(r);
+//        }
+//
+//        List<Recipe> mealPendingRecipes = meal.getPendingRecipes();
+//        System.out.println(mealPendingRecipes);
+//        mealPendingRecipes.addAll(recipes);
+//
+//        meal.setPendingRecipes(recipes);
+//        System.out.println(meal.getPendingRecipes());
+//        return updateObject(meal,mealId);
+
+        MealAddOnRequestDTO mealAddOnRequestDTO = mealAddOnRequestService.addObject(new MealAddOnRequestDTO());
+        mealAddOnRequestDTO.setMeal(meal);
+//        meal.getMealAddOnRequestDTOList().add(mealAddOnRequestDTO);
+        mealAddOnRequestDTO.setRequestedRecipes(recipes);
+        mealAddOnRequestDTO.setUserName(user.getName());
+        mealAddOnRequestDTO.setUserImgUrl(user.getImgUrl());
+        mealAddOnRequestService.updateObject(mealAddOnRequestDTO,mealAddOnRequestDTO.getId());
+
+
+
+
+
+
+    }
+
 }

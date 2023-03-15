@@ -110,4 +110,18 @@ public List<User> getUsersByFamily(Family family ){
         return userRepository.getAllByFamily(family);
 }
 
+
+
+
+public  User getSingle(Long userId){
+        return userRepository.findById(userId).orElseThrow();
+}
+
+
+    public  User getSingleByName(String name){
+        return userRepository.findByName(name);
+    }
+
+
+
 }

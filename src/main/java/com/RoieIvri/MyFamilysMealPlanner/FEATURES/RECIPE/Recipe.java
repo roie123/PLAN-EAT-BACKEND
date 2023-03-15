@@ -3,6 +3,7 @@ package com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.Family;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.INGRIDIENT.Ingredient;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL.Meal;
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.USER.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,9 +36,22 @@ public class Recipe {
     @JsonIgnore
     private List<Meal> meals;
 
+
+
+
+    @ManyToMany()
+    @JsonIgnore
+    private List<Meal> mealsForApproval ;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.REMOVE)
     private Family family;
+
+
+    @ManyToOne()
+    @JsonIgnore
+    private User requestCreator;
+
 
     public Family getFamily() {
         return family;
@@ -68,7 +82,10 @@ public class Recipe {
                 ", isRecommended=" + isRecommended +
                 ", estimatedPrice=" + estimatedPrice +
                 ", isActive=" + isActive +
-                ", imgUrl='" + imgUrl + '\'' ;
+                ", imgUrl='" + imgUrl + '\''+
+                 " requestCreator" + requestCreator + '\''
+
+                ;
 //                ", ingredients=" + ingredients +
 //                ", meal=" + meals;
 //                ", family=" + family +

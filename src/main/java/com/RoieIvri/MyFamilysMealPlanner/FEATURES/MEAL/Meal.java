@@ -1,14 +1,13 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.MEAL;
 
+import com.RoieIvri.MyFamilysMealPlanner.FEATURES.DTO.AddToMealDTO.MealAddOnRequestDTO;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.FAMILY.Family;
 import com.RoieIvri.MyFamilysMealPlanner.FEATURES.RECIPE.Recipe;
 import com.RoieIvri.MyFamilysMealPlanner.TOOLS.MealTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 import lombok.*;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +30,16 @@ public class Meal  {
     private boolean isActive= true;
     @Enumerated(EnumType.STRING)
     private MealTime mealTime;
+
+
+
+    @OneToMany(mappedBy = "meal")
+    private List<MealAddOnRequestDTO> mealAddOnRequestDTOList;
     @ManyToMany()
-    private List<Recipe> recipeList= new ArrayList<>();
+    private List<Recipe> approvedRecipes = new ArrayList<>();
+
+    @ManyToMany()
+    private List<Recipe> pendingRecipes = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -42,11 +49,18 @@ public class Meal  {
         this.id = id;
     }
 
+
+
 @ManyToOne
 @JsonIgnore
 private Family family;
     public void addRecipe(Recipe recipe){
-        this.recipeList.add(recipe);
+        this.approvedRecipes.add(recipe);
     }
+
+
+
+
+
 
 }
