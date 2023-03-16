@@ -98,12 +98,14 @@ public class RecipeService {
     }
 
     @Transactional
-    public Recipe addToFamily(Recipe recipe, Long familyId) throws GeneralExceptions {
-        System.out.println(familyId);
+    public Recipe addToFamily(Recipe recipe, Long familyId) throws Exception {
         familyService.checkFamilyId(familyId);
         Family family = familyService.getById(familyId);
         recipe.setFamily(family);
-        return recipeRepository.save(recipe);
+        recipe=  recipeRepository.save(recipe);
+        family.getFavoriteRecipes().add(recipe);
+        familyService.updateObject(family,familyId);
+        return recipe;
 
     }
 }

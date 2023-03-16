@@ -142,4 +142,25 @@ public class MealService  {
 
     }
 
+
+
+    @Transactional
+    public void approveMealAddOnRequest(Long mealId, Long mealAddOnRequestId,Recipe recipe) throws Exception {
+        Meal mealFromDB = mealRepoitory.findById(mealId).orElseThrow();
+
+        MealAddOnRequestDTO mealAddOnRequestDTO = mealAddOnRequestService.getSingle(mealAddOnRequestId);
+
+        mealFromDB.getApprovedRecipes().add(recipe);
+
+        mealAddOnRequestDTO.getRequestedRecipes().remove(recipe);
+
+        if (mealAddOnRequestDTO.getRequestedRecipes().size()==0){
+            mealAddOnRequestService.deleteObject(mealAddOnRequestId);
+        }else {
+            mealAddOnRequestService.updateObject(mealAddOnRequestDTO,mealAddOnRequestId);
+        }
+        updateObject(mealFromDB,mealId);
+
+    }
+
 }
