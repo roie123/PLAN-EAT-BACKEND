@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor@NoArgsConstructor
 @Getter@Setter@Builder
+@ToString
 public class MealAddOnRequestDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class MealAddOnRequestDTO {
 
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH)
     private List<Recipe> requestedRecipes;
 
 

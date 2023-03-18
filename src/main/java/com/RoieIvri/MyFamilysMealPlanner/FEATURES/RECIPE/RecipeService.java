@@ -108,4 +108,15 @@ public class RecipeService {
         return recipe;
 
     }
+
+
+@Transactional
+    public Recipe getSingleRecipe(Long objectId){
+        Recipe recipe =  recipeRepository.findById(objectId).orElseThrow();
+        if (recipe.getIngredients().size() > -1){
+            System.out.println(recipe.getIngredients());
+            return recipe;
+        }
+        return null;
+    }
 }

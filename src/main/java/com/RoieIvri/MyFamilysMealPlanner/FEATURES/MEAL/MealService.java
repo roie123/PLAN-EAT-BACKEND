@@ -16,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -113,6 +116,15 @@ public class MealService  {
 
         //The user id has to have validation because the user has control  over it
         User user = userService.getSingle(userId);
+
+        List<Recipe> recipesFromDB = new ArrayList<>();
+
+        for (Recipe re:
+             recipes) {
+            recipesFromDB.add(recipeService.getSingleRecipe(re.getId()));
+            System.out.println(re);
+        }
+
 //        for (Recipe r : recipes
 //             ) {
 //            r.setRequestCreator(user);
@@ -131,9 +143,10 @@ public class MealService  {
         mealAddOnRequestDTO.setMeal(meal);
 //        meal.getMealAddOnRequestDTOList().add(mealAddOnRequestDTO);
         mealAddOnRequestDTO.setRequestedRecipes(recipes);
+
         mealAddOnRequestDTO.setUserName(user.getName());
         mealAddOnRequestDTO.setUserImgUrl(user.getImgUrl());
-        mealAddOnRequestService.updateObject(mealAddOnRequestDTO,mealAddOnRequestDTO.getId());
+//        mealAddOnRequestService.updateObject(mealAddOnRequestDTO,mealAddOnRequestDTO.getId());
 
 
 
@@ -145,21 +158,43 @@ public class MealService  {
 
 
     @Transactional
-    public void approveMealAddOnRequest(Long mealId, Long mealAddOnRequestId,Recipe recipe) throws Exception {
+    public Meal approveMealAddOnRequest(Long mealId, Long mealAddOnRequestId,Recipe recipe) throws Exception {
         Meal mealFromDB = mealRepoitory.findById(mealId).orElseThrow();
+        MealAddOnRequestDTO mealAddOnRequestDTO = mealFromDB.getMealAddOnRequestDTOList().stream().filter(new Predicate<MealAddOnRequestDTO>() {
 
-        MealAddOnRequestDTO mealAddOnRequestDTO = mealAddOnRequestService.getSingle(mealAddOnRequestId);
+            @Override
+            public boolean test(MealAddOnRequestDTO mealAddOnRequestDTO) {
+                return mealAddOnRequestDTO.getId().longValue()==mealAddOnRequestId.longValue();
+            }
+        }).toList().get(0);
+        List<Recipe> recipeList = mealAddOnRequestDTO.getRequestedRecipes().stream().filter(new Predicate<Recipe>() {
+            int counter =1;
+            @Override
+            public boolean test(Recipe r) {
+                if (r.getId().longValue() !=recipe.getId().longValue()){
+                    return true;
+                }else if (counter>0){
+                    counter--;
+                    return false;
+                }
+                return true;
 
-        mealFromDB.getApprovedRecipes().add(recipe);
+            }
+        }).toList();
 
-        mealAddOnRequestDTO.getRequestedRecipes().remove(recipe);
 
-        if (mealAddOnRequestDTO.getRequestedRecipes().size()==0){
-            mealAddOnRequestService.deleteObject(mealAddOnRequestId);
-        }else {
-            mealAddOnRequestService.updateObject(mealAddOnRequestDTO,mealAddOnRequestId);
-        }
-        updateObject(mealFromDB,mealId);
+            Recipe recipeFromDB = recipeService.getSingleRecipe(recipe.getId());
+        System.out.println(recipeFromDB.getIngredients());
+        mealAddOnRequestDTO.setRequestedRecipes(recipeList);
+
+        mealFromDB.getApprovedRecipes().add(recipeFromDB);
+        System.out.println(recipeFromDB);
+
+
+
+return mealFromDB;
+
+
 
     }
 

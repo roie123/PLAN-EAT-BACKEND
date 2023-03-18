@@ -147,6 +147,18 @@ public class MockDataGenerator implements InitializingBean {
             recipe.setEstimatedPrice(random.nextDouble(3, 15));
             recipe.setRecommended(random.nextBoolean());
             recipe.setImgUrl(RandomPics.getRandomFoodPic());
+
+            for (int j = 0; j < 3; j++) {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setPrice(random.nextDouble(1, 30));
+                ingredient.setName(IngredientNames.getRandom());
+                ingredient.setPriceCategory(PriceCategory.getRandom());
+                ingredient.setIngredientType(IngredientType.getRandom());
+                ingredient.setImgUrl(RandomIngrredientImgUrl.getRandom());
+                ingredient = ingredientService.addObject(ingredient);
+
+                recipe.getIngredients().add(ingredient);
+            }
             family.addToFavoriteRecipes(recipe);
             recipe.setFamily(family);
         }

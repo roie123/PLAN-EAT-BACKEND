@@ -48,12 +48,12 @@ public class MealController  {
 
     }
 
-    @PutMapping("/approveRequest/")
-    public void approveMealAddOnRequest(){//TODO Implement the approval from the main user
-//        mealService.approveMealAddOnRequest();
+    @PutMapping("/approveRequest/{mealId}/{mealAddOnId}")
+    public Meal approveMealAddOnRequest(@PathVariable Long mealId,@PathVariable Long mealAddOnId, @RequestBody Recipe recipe) throws Exception {//TODO Implement the approval from the main user
+        return mealService.approveMealAddOnRequest(mealId,mealAddOnId,recipe);
     }
 
-
+//Long mealId, Long mealAddOnRequestId,Recipe recipe
     @PutMapping("/addPendingRecipe/{mealId}/{userId}")
     public Meal addPendingRecipe(@RequestBody Recipe recipe,@PathVariable Long mealId,@PathVariable Long userId) throws Exception {
        return mealService.addRecipeToApprove(recipe,mealId,userId);

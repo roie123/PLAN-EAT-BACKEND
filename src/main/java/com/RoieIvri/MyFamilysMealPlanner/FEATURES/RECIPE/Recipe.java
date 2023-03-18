@@ -29,7 +29,7 @@ public class Recipe {
     private boolean isActive = true;
     private String imgUrl;
     private int timeToMake;
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER ,cascade = CascadeType.REFRESH)
     private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToMany()
@@ -83,13 +83,10 @@ public class Recipe {
                 ", estimatedPrice=" + estimatedPrice +
                 ", isActive=" + isActive +
                 ", imgUrl='" + imgUrl + '\''+
-                 " requestCreator" + requestCreator + '\''
+                 " requestCreator" + requestCreator + '\''+
 
-                ;
-//                ", ingredients=" + ingredients +
-//                ", meal=" + meals;
-//                ", family=" + family +
 
+                ", ingredients=" + ingredients;
     }
 
 

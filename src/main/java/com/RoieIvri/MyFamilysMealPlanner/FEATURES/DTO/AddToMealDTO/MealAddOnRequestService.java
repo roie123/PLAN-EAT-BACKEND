@@ -47,6 +47,7 @@ public class MealAddOnRequestService {
     }
 
     public void deleteObject(Long objectId) throws Exception {
+        mealAddOnRequestRepository.deleteById(objectId);
 
     }
 }
