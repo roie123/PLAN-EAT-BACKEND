@@ -104,7 +104,6 @@ public class RecipeService {
         recipe.setFamily(family);
         recipe=  recipeRepository.save(recipe);
         family.getFavoriteRecipes().add(recipe);
-        familyService.updateObject(family,familyId);
         return recipe;
 
     }
