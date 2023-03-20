@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 //@ToString
-public class Meal  {
+public class Meal implements Comparable<Meal> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +59,8 @@ private Family family;
     }
 
 
-
-
-
-
+    @Override
+    public int compareTo(Meal o) {
+        return o.mealTime.ordinal()-this.mealTime.ordinal();
+    }
 }

@@ -1,5 +1,7 @@
 package com.RoieIvri.MyFamilysMealPlanner.FEATURES.CART;
 
+import com.RoieIvri.MyFamilysMealPlanner.TOOLS.GeneralExceptions;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,10 @@ public class CartController {
         return cartService.updateCart(cart,cartId);
     }
 
-
+@GetMapping("/byFamily/{familyId}")
+    public Cart getFamilyCart(@PathVariable Long familyId) throws GeneralExceptions {
+        return cartService.getFamilyCart(familyId);
+}
 
 
 }

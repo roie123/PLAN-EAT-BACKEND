@@ -117,4 +117,12 @@ public Cart updateCart(Cart cart , Long cartId) throws Exception {
 
       return   cartRepository.save(cartFromDB);
 }
+
+
+
+
+public Cart getFamilyCart(Long familyId) throws GeneralExceptions {
+        familyService.checkFamilyId(familyId);
+        return cartRepository.getFamilyCart(familyId);
+}
 }
